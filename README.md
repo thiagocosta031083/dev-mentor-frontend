@@ -42,9 +42,33 @@ Em produção, o usuário inicial é definido pelas variáveis seguras do backen
 ## Validação
 
 ```bash
+npm run format:check
+npm run lint
 npm test
 npm run build
 ```
+
+## Padrões de código
+
+O projeto usa EditorConfig para UTF-8, finais de linha LF e indentação de 2 espaços em
+TypeScript, HTML, SCSS, JSON e YAML. O Prettier 3 realiza apenas a formatação, enquanto
+ESLint 10, `typescript-eslint` e `angular-eslint` validam qualidade do TypeScript e dos
+templates Angular.
+
+```bash
+# Formatar o código-fonte
+npm run format
+
+# Verificar formatação e qualidade sem alterar arquivos
+npm run format:check
+npm run lint
+```
+
+No VS Code, instale as extensões recomendadas pelo workspace: EditorConfig, Prettier,
+ESLint e Angular Language Service. O arquivo `.vscode/settings.json` habilita formatação
+ao salvar e correções explícitas do ESLint. No IntelliJ IDEA, habilite EditorConfig em
+`Settings > Editor > Code Style`, configure o Prettier do projeto e execute os scripts
+npm pela janela `package.json`.
 
 ## Produção com Docker
 
