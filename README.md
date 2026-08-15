@@ -1,79 +1,67 @@
-# Dev Mentor – Frontend
+# Dev Mentor Frontend
 
-Frontend web do sistema **Dev Mentor**, responsável pela interface do usuário e pela visualização da evolução técnica de desenvolvedores.
+Interface web do Dev Mentor para planejar tecnologias, acompanhar conteúdos, registrar estudos e medir evolução. O projeto é uma SPA Angular integrada à API `dev-mentor-backend`.
 
-O frontend consome a API REST do backend para exibir dados de planejamento de estudos, registros de aprendizado e indicadores de progresso.
+## Funcionalidades
 
----
+- Login JWT e rotas protegidas
+- Dashboard de evolução por tecnologia
+- Cadastro, edição, ativação e inativação de tecnologias
+- Gestão do ciclo de conteúdos: não iniciado, em andamento e concluído
+- Planos de estudo por período e carga horária
+- Registro de sessões de aula, prática e revisão
+- Gestão de projetos pessoais
+- Layout responsivo para desktop e celular
+- Tratamento centralizado de erros da API
 
-## 📌 Contexto
+## Requisitos
 
-O Dev Mentor foi criado para ajudar desenvolvedores juniores a organizarem seus estudos e visualizarem sua evolução técnica de forma clara e objetiva.
+- Node.js 26.7.0 (também compatível com as linhas 22.22.3+ e 24.15.0+ suportadas pelo Angular 22)
+- npm 12
+- `dev-mentor-backend` executando na porta `8080`
 
-Este repositório contém a interface web do sistema, desenvolvida com foco em simplicidade, clareza e usabilidade.
+## Desenvolvimento local
 
----
+No backend:
 
-## 🎯 Responsabilidades do Frontend
+```bash
+mvn spring-boot:run
+```
 
-- Interface para cadastro de tecnologias e disciplinas
-- Planejamento e visualização de conteúdos de estudo
-- Registro diário de estudos
-- Exibição de indicadores de evolução técnica
-- Dashboard de acompanhamento
+No frontend:
 
----
+```bash
+npm ci
+npm start
+```
 
-## 🛠️ Stack Utilizada
+Acesse `http://localhost:4200`. O Angular encaminha `/api` para `http://localhost:8080` por meio de `proxy.conf.json`, portanto não é necessário liberar CORS no backend.
 
-- Angular
-- TypeScript
-- HTML5
-- CSS3
+Em produção, o usuário inicial é definido pelas variáveis seguras do backend. Nenhuma credencial fica armazenada neste repositório frontend.
 
----
+## Validação
 
-## 🏗️ Arquitetura Frontend
+```bash
+npm test
+npm run build
+```
 
-- Components: telas e componentes visuais
-- Services: comunicação com a API backend
-- Models: tipagem dos dados
-- Guards: proteção de rotas (login)
+## Produção com Docker
 
----
+```bash
+docker build -t dev-mentor-frontend .
+docker run --rm -p 8081:8080 \
+  -e BACKEND_UPSTREAM=http://endereco-interno-backend:8080 \
+  dev-mentor-frontend
+```
 
-## 🔌 Integração com o Backend
+O Nginx serve a SPA e encaminha `/api/` para `BACKEND_UPSTREAM`. Em produção, publique somente o Nginx por HTTPS; mantenha backend e banco em rede privada. A configuração inclui CSP, bloqueio de iframe, proteção contra MIME sniffing e execução do container sem usuário root.
 
-O frontend consome a API REST disponível no repositório:
+## Integração
 
-👉 **dev-mentor-backend**
+O cliente usa URLs relativas sob `/api/v1`. Essa estratégia mantém frontend e API na mesma origem, evita expor endereço interno do servidor e permite trocar o destino do backend sem recompilar o Angular:
 
-A URL da API é configurada por ambiente (development / production).
+- desenvolvimento: `proxy.conf.json`
+- produção: `BACKEND_UPSTREAM` no container Nginx
 
----
-
-## 🚧 Status do Projeto
-
-🛠️ MVP V1 em desenvolvimento
-
-Funcionalidades planejadas para a V1:
-- Tela de login
-- Cadastro de tecnologias e disciplinas
-- Planejamento de conteúdos
-- Registro de estudos
-- Dashboard de evolução técnica
-
----
-
-## ▶️ Como Executar (em breve)
-
-As instruções de execução serão adicionadas conforme o avanço do desenvolvimento.
-
----
-
-## 👨‍💻 Autor
-
-Thiago Costa  
-Desenvolvedor Java | Angular  
-
-📎 LinkedIn: https://www.linkedin.com/in/thiago-de-almeida-costa/
+O token JWT é mantido em `sessionStorage`, é removido ao sair e não é persistido entre sessões do navegador. Respostas `401` encerram a sessão automaticamente.

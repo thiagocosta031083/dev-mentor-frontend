@@ -1,0 +1,27 @@
+<div class="app-shell">
+  <aside class="sidebar" [class.open]="menuOpen()">
+    <a class="brand" routerLink="/dashboard" (click)="menuOpen.set(false)">
+      <span class="brand-mark">DM</span><span>Dev Mentor</span>
+    </a>
+    <nav aria-label="Navegação principal">
+      @for (link of links; track link.route) {
+        <a [routerLink]="link.route" routerLinkActive="active" (click)="menuOpen.set(false)">
+          <span class="nav-icon" aria-hidden="true">{{ link.icon }}</span>{{ link.label }}
+        </a>
+      }
+    </nav>
+    <div class="user-card">
+      <span class="avatar">{{ auth.email().charAt(0).toUpperCase() }}</span>
+      <div><strong>{{ auth.email() }}</strong><small>Sessão ativa</small></div>
+      <button class="icon-button" type="button" title="Sair" aria-label="Sair" (click)="logout()">↪</button>
+    </div>
+  </aside>
+  @if (menuOpen()) { <button class="backdrop" aria-label="Fechar menu" (click)="menuOpen.set(false)"></button> }
+  <main>
+    <header class="mobile-header">
+      <button class="icon-button" aria-label="Abrir menu" (click)="menuOpen.set(true)">☰</button>
+      <span class="brand"><span class="brand-mark">DM</span><span>Dev Mentor</span></span>
+    </header>
+    <div class="content"><router-outlet /></div>
+  </main>
+</div>

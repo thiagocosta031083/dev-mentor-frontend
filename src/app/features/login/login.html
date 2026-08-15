@@ -1,0 +1,23 @@
+<main class="login-page">
+  <section class="login-intro">
+    <div class="intro-content">
+      <span class="eyebrow">Sua jornada, com direção</span>
+      <h1>Transforme estudo em evolução mensurável.</h1>
+      <p>Planeje tecnologias, registre sua prática e acompanhe seu progresso em um só lugar.</p>
+      <div class="quote"><span>“</span><p>Consistência vence intensidade quando o objetivo é dominar uma habilidade.</p></div>
+    </div>
+  </section>
+  <section class="login-panel">
+    <form (ngSubmit)="submit()" [formGroup]="form" novalidate>
+      <div class="login-brand"><span class="brand-mark">DM</span><strong>Dev Mentor</strong></div>
+      <h2>Bem-vindo de volta</h2><p class="muted">Entre para continuar sua evolução.</p>
+      @if (error()) { <div class="alert error" role="alert">{{ error() }}</div> }
+      <label>E-mail<input type="email" formControlName="email" autocomplete="username" placeholder="voce@exemplo.com"></label>
+      @if (form.controls.email.touched && form.controls.email.invalid) { <small class="field-error">Informe um e-mail válido.</small> }
+      <label>Senha<div class="password-field"><input [type]="showPassword() ? 'text' : 'password'" formControlName="senha" autocomplete="current-password" placeholder="Sua senha"><button type="button" (click)="showPassword.set(!showPassword())" [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'">{{ showPassword() ? 'Ocultar' : 'Mostrar' }}</button></div></label>
+      @if (form.controls.senha.touched && form.controls.senha.invalid) { <small class="field-error">Informe sua senha.</small> }
+      <button class="button primary full" type="submit" [disabled]="loading()">{{ loading() ? 'Entrando…' : 'Entrar' }}</button>
+      <p class="security-note">🔒 Seus dados de acesso são enviados por conexão segura em produção.</p>
+    </form>
+  </section>
+</main>

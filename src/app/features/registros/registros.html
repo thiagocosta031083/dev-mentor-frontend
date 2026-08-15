@@ -1,0 +1,22 @@
+<header class="page-header">
+  <div><h1>Registros de estudo</h1><p>Consistência começa quando você registra o que fez.</p></div>
+  <button class="button primary" [disabled]="!selectedId" (click)="open()">＋ Registrar sessão</button>
+</header>
+<div class="toolbar"><label>Tecnologia<select [(ngModel)]="selectedId" (ngModelChange)="load()">@for(t of technologies();track t.id){<option [ngValue]="t.id">{{t.nome}}</option>}</select></label></div>
+@if(error()){<div class="alert error">{{error()}}</div>}
+@if(formOpen()){
+  <form class="card form-card form-grid" [formGroup]="form" (ngSubmit)="save()">
+    <h2 class="span-2">Nova sessão de estudo</h2>
+    <label>Data<input type="date" formControlName="data" [max]="today"></label>
+    <label>Tipo<select formControlName="tipo">@for(tipo of tipos;track tipo){<option [value]="tipo">{{label(tipo)}}</option>}</select></label>
+    <label>Tempo (minutos)<input type="number" min="1" formControlName="tempoMinutos"></label>
+    <label>Conteúdo (opcional)<select formControlName="conteudoId"><option [ngValue]="null">Estudo geral</option>@for(c of contents();track c.id){<option [ngValue]="c.id">{{c.titulo}}</option>}</select></label>
+    <label class="span-2">Observações<textarea formControlName="observacoes" maxlength="500"></textarea></label>
+    <div class="form-actions"><button type="button" class="button secondary" (click)="formOpen.set(false)">Cancelar</button><button class="button primary" [disabled]="saving()">Registrar</button></div>
+  </form>
+}
+<section class="card table-wrap">
+  @if(loading()){<div class="loading">Carregando histórico…</div>}
+  @else if(!items().length){<div class="empty-state"><strong>Nenhum estudo registrado</strong>Registre sua primeira sessão para alimentar os indicadores.</div>}
+  @else{<table class="data-table"><thead><tr><th>Data</th><th>Tipo</th><th>Conteúdo</th><th>Duração</th><th>Observações</th></tr></thead><tbody>@for(r of items();track r.id){<tr><td>{{r.data|date:'dd/MM/yyyy':'UTC'}}</td><td><span class="badge info">{{label(r.tipo)}}</span></td><td>{{contentName(r.conteudoId)}}</td><td><strong>{{r.tempoMinutos}} min</strong></td><td>{{r.observacoes||'—'}}</td></tr>}</tbody></table>}
+</section>

@@ -1,0 +1,16 @@
+<header class="page-header"><div><h1>Tecnologias</h1><p>Organize as habilidades que fazem parte da sua jornada.</p></div><button class="button primary" (click)="newItem()">＋ Nova tecnologia</button></header>
+@if (error()) { <div class="alert error">{{ error() }}</div> }
+@if (formOpen()) {
+  <form class="card form-card form-grid" [formGroup]="form" (ngSubmit)="save()"><h2 class="span-2">{{ editingId() ? 'Editar' : 'Nova' }} tecnologia</h2>
+    <label>Nome<input formControlName="nome" placeholder="Ex.: Java"></label><label>Tipo<select formControlName="tipo">@for (tipo of tipos; track tipo) { <option [value]="tipo">{{ label(tipo) }}</option> }</select></label>
+    <label>Carga horária planejada<input type="number" min="0.1" step="0.5" formControlName="cargaHorariaPlanejada"></label><label class="span-2">Descrição<textarea formControlName="descricao" maxlength="500"></textarea></label>
+    <div class="form-actions"><button type="button" class="button secondary" (click)="formOpen.set(false)">Cancelar</button><button class="button primary" [disabled]="saving()">{{ saving() ? 'Salvando…' : 'Salvar' }}</button></div>
+  </form>
+}
+<section class="card table-wrap">
+  @if (loading()) { <div class="loading">Carregando tecnologias…</div> } @else if (!items().length) { <div class="empty-state"><strong>Nenhuma tecnologia cadastrada</strong>Comece adicionando a primeira habilidade ao seu plano.</div> } @else {
+    <table class="data-table"><thead><tr><th>Nome</th><th>Tipo</th><th>Carga planejada</th><th>Status</th><th></th></tr></thead><tbody>
+      @for (item of items(); track item.id) { <tr><td><strong>{{ item.nome }}</strong><br><span class="muted">{{ item.descricao || 'Sem descrição' }}</span></td><td>{{ label(item.tipo) }}</td><td>{{ item.cargaHorariaPlanejada }} h</td><td><span class="badge" [class.success]="item.status === 'ATIVA'">{{ item.status }}</span></td><td class="actions"><button class="button secondary small" (click)="edit(item)">Editar</button><button class="button small" [class.danger]="item.status === 'ATIVA'" [class.secondary]="item.status !== 'ATIVA'" (click)="toggle(item)">{{ item.status === 'ATIVA' ? 'Inativar' : 'Ativar' }}</button></td></tr> }
+    </tbody></table>
+  }
+</section>
