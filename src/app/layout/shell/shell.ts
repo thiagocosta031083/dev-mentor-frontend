@@ -19,7 +19,10 @@ export class Shell {
     { route: '/projetos', icon: '◇', label: 'Projetos' },
   ];
 
-  constructor(readonly auth: AuthService, private readonly router: Router) {}
+  constructor(
+    readonly auth: AuthService,
+    private readonly router: Router
+  ) {}
 
   logout() {
     this.auth.logout();

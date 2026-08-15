@@ -17,16 +17,18 @@ export class AuthService {
 
   login(email: string, senha: string) {
     return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { email, senha }).pipe(
-      tap(response => {
+      tap((response) => {
         sessionStorage.setItem(TOKEN_KEY, response.token);
         sessionStorage.setItem(EMAIL_KEY, response.email);
         this.tokenState.set(response.token);
         this.email.set(response.email);
-      }),
+      })
     );
   }
 
-  token() { return this.tokenState(); }
+  token() {
+    return this.tokenState();
+  }
 
   logout() {
     sessionStorage.removeItem(TOKEN_KEY);

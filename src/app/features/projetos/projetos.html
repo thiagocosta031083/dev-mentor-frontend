@@ -1,2 +1,65 @@
-<header class="page-header"><div><h1>Projetos pessoais</h1><p>Converta conhecimento em entregas concretas.</p></div><button class="button primary" (click)="open()">＋ Novo projeto</button></header>@if(error()){<div class="alert error">{{error()}}</div>}@if(formOpen()){<form class="card form-card form-grid" [formGroup]="form" (ngSubmit)="save()"><h2 class="span-2">{{editingId()?'Editar':'Novo'}} projeto</h2><label>Nome<input formControlName="nome" placeholder="Ex.: API de finanças"></label><label>Stack<input formControlName="stack" placeholder="Java, Spring, PostgreSQL"></label><label>Status<select formControlName="status">@for(s of statuses;track s){<option [value]="s">{{label(s)}}</option>}</select></label><label>Tecnologia relacionada<select formControlName="tecnologiaId"><option [ngValue]="null">Sem vínculo</option>@for(t of technologies();track t.id){<option [ngValue]="t.id">{{t.nome}}</option>}</select></label><label class="span-2">Próximo passo<textarea formControlName="proximoPasso" maxlength="300"></textarea></label><div class="form-actions"><button type="button" class="button secondary" (click)="formOpen.set(false)">Cancelar</button><button class="button primary" [disabled]="saving()">Salvar</button></div></form>}
-@if(loading()){<div class="card loading">Carregando projetos…</div>}@else if(!items().length){<div class="card empty-state"><strong>Nenhum projeto criado</strong>Comece com uma ideia pequena que coloque seus estudos em prática.</div>}@else{<section class="project-grid">@for(p of items();track p.id){<article class="card project"><div class="project-top"><span [class]="'badge '+badge(p.status)">{{label(p.status)}}</span><button class="button secondary small" (click)="edit(p)">Editar</button></div><h2>{{p.nome}}</h2><p class="stack">{{p.stack}}</p><div class="project-meta"><span>Tecnologia</span><strong>{{techName(p.tecnologiaId)}}</strong></div><div class="next"><span>Próximo passo</span><p>{{p.proximoPasso||'Defina a próxima ação para manter o projeto avançando.'}}</p></div></article>}</section>}
+<header class="page-header">
+  <div>
+    <h1>Projetos pessoais</h1>
+    <p>Converta conhecimento em entregas concretas.</p>
+  </div>
+  <button class="button primary" (click)="open()">＋ Novo projeto</button>
+</header>
+@if (error()) {
+  <div class="alert error">{{ error() }}</div>
+}
+@if (formOpen()) {
+  <form class="card form-card form-grid" [formGroup]="form" (ngSubmit)="save()">
+    <h2 class="span-2">{{ editingId() ? 'Editar' : 'Novo' }} projeto</h2>
+    <label>Nome<input formControlName="nome" placeholder="Ex.: API de finanças" /></label
+    ><label>Stack<input formControlName="stack" placeholder="Java, Spring, PostgreSQL" /></label
+    ><label
+      >Status<select formControlName="status">
+        @for (s of statuses; track s) {
+          <option [value]="s">{{ label(s) }}</option>
+        }
+      </select></label
+    ><label
+      >Tecnologia relacionada<select formControlName="tecnologiaId">
+        <option [ngValue]="null">Sem vínculo</option>
+        @for (t of technologies(); track t.id) {
+          <option [ngValue]="t.id">{{ t.nome }}</option>
+        }
+      </select></label
+    ><label class="span-2"
+      >Próximo passo<textarea formControlName="proximoPasso" maxlength="300"></textarea>
+    </label>
+    <div class="form-actions">
+      <button type="button" class="button secondary" (click)="formOpen.set(false)">Cancelar</button
+      ><button class="button primary" [disabled]="saving()">Salvar</button>
+    </div>
+  </form>
+}
+@if (loading()) {
+  <div class="card loading">Carregando projetos…</div>
+} @else if (!items().length) {
+  <div class="card empty-state">
+    <strong>Nenhum projeto criado</strong>Comece com uma ideia pequena que coloque seus estudos em
+    prática.
+  </div>
+} @else {
+  <section class="project-grid">
+    @for (p of items(); track p.id) {
+      <article class="card project">
+        <div class="project-top">
+          <span [class]="'badge ' + badge(p.status)">{{ label(p.status) }}</span
+          ><button class="button secondary small" (click)="edit(p)">Editar</button>
+        </div>
+        <h2>{{ p.nome }}</h2>
+        <p class="stack">{{ p.stack }}</p>
+        <div class="project-meta">
+          <span>Tecnologia</span><strong>{{ techName(p.tecnologiaId) }}</strong>
+        </div>
+        <div class="next">
+          <span>Próximo passo</span>
+          <p>{{ p.proximoPasso || 'Defina a próxima ação para manter o projeto avançando.' }}</p>
+        </div>
+      </article>
+    }
+  </section>
+}
